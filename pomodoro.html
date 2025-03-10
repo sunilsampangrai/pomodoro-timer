@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pomodoro Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    #timer {
+      font-size: 40px;
+      margin: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Pomodoro Timer</h2>
+  <div id="timer">25:00</div>
+  <button onclick="startTimer()">Start</button>
+  <button onclick="resetTimer()">Reset</button>
+
+  <script>
+    let workTime = 25 * 60; // 25 minutes
+    let breakTime = 5 * 60; // 5 minutes
+    let timer;
+    let isWorking = true;
+
+    function startTimer() {
+      let duration = isWorking ? workTime : breakTime;
+      let display = document.querySelector('#timer');
+      let startTime = Date.now();
+
+      timer = setInterval(function () {
+        let elapsed = Math.floor((Date.now() - startTime) / 1000);
+        let remaining = duration - elapsed;
+
+        if (remaining < 0) {
+          clearInterval(timer);
+          alert(isWorking ? "Time for a break!" : "Back to work!");
+          isWorking = !isWorking;
+          startTimer();
+          return;
+        }
+
+        let minutes = Math.floor(remaining / 60);
+        let seconds = remaining % 60;
+        display.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      document.querySelector('#timer').textContent = "25:00";
+      isWorking = true;
+    }
+  </script>
+</body>
+</html>
